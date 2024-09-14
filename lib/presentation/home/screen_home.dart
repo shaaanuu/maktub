@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/infrastructure/tasks/tasks.dart';
-import 'package:to_do_app/presentation/common_widgets/icn_btn.dart';
+
+import '../../infrastructure/tasks/tasks.dart';
+import '../common_widgets/icn_btn.dart';
 
 class ScreenHome extends StatefulWidget {
   const ScreenHome({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _ScreenHomeState extends State<ScreenHome> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('To-Do')),
+      appBar: AppBar(title: const Text('Maktub')),
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: 20),
         itemCount: tasks.length,
@@ -101,7 +102,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                           textEditingController.clear();
                           Navigator.pop(context);
                         },
-                        child: Text(
+                        child: const Text(
                           'Cancel',
                           style: TextStyle(
                             color: Colors.black,
@@ -119,7 +120,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                           textEditingController.clear();
                           Navigator.pop(context);
                         },
-                        child: Text(
+                        child: const Text(
                           'Add',
                           style: TextStyle(
                             color: Colors.black,
