@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/todo/todo_bloc.dart';
 import 'presentation/home/screen_home.dart';
 
 void main() {
@@ -31,7 +33,10 @@ class MyApp extends StatelessWidget {
           checkColor: WidgetStatePropertyAll(Colors.black),
         ),
       ),
-      home: const ScreenHome(),
+      home: BlocProvider(
+        create: (context) => TodoBloc(),
+        child: const ScreenHome(),
+      ),
     );
   }
 }

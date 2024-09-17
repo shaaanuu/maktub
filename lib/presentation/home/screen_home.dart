@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../model/todo_model.dart';
+import '../../bloc/todo/todo_bloc.dart';
+import '../../bloc/todo/todo_event.dart';
+import '../../bloc/todo/todo_state.dart';
 import 'widgets/fab.dart';
 import 'widgets/listitem_decoration.dart';
 
@@ -13,39 +17,58 @@ class ScreenHome extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Maktub'),
       ),
-      body: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: toDo.value.length,
-        itemBuilder: (context, index) {
-          final item = toDo.value[index];
+      body: BlocBuilder<TodoBloc, TodoState>(
+        builder: (context, state) {
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: state.todos.length,
+            itemBuilder: (context, index) {
+              final item = state.todos[index];
 
-          return ListItemDecoration(
-            child: ValueListenableBuilder(
-              valueListenable: toDo,
-              builder: (context, value, _) {
-                return ListTile(
-                  leading: Checkbox(
-                    value: item[0],
-                    onChanged: (newValue) {
-                      if (newValue != null) {
-                        toDo.value[index][0] = newValue;
-                        toDo.notifyListeners();
-                      }
+              final action = ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    borderRadius: BorderRadius.circular(10),
+                    icon: Icons.delete_outline_rounded,
+                    onPressed: (context) {
+                      BlocProvider.of<TodoBloc>(context).add(
+                        RemoveTodo(index),
+                      );
                     },
                   ),
-                  title: Text(
-                    item[1],
-                    style: TextStyle(
-                      decoration: item[0] ? TextDecoration.lineThrough : null,
+                ],
+              );
+
+              return Slidable(
+                startActionPane: action,
+                endActionPane: action,
+                child: ListItemDecoration(
+                  child: ListTile(
+                    leading: Checkbox(
+                      value: item[0],
+                      onChanged: (newValue) {
+                        if (newValue != null) {
+                          BlocProvider.of<TodoBloc>(context).add(
+                            ToggleTodoStatus(index),
+                          );
+                        }
+                      },
+                    ),
+                    title: Text(
+                      item[1],
+                      style: TextStyle(
+                        decoration: item[0] ? TextDecoration.lineThrough : null,
+                      ),
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           );
         },
       ),
-      floatingActionButton: Fab(toDo: toDo),
+      floatingActionButton: const Fab(),
     );
   }
 }
