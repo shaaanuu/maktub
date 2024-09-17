@@ -6,14 +6,6 @@ void main() {
   runApp(const MyApp());
 }
 
-ThemeData lightTheme = ThemeData(
-  primarySwatch: Colors.lightGreen,
-  scaffoldBackgroundColor: Colors.white,
-  textTheme: const TextTheme(
-    bodyMedium: TextStyle(color: Colors.black),
-  ),
-);
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -22,7 +14,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Maktub',
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
+      theme: ThemeData(
+        fontFamily: 'Montserrat',
+        appBarTheme: const AppBarTheme(
+          shadowColor: Colors.grey,
+          elevation: 0.5,
+          titleTextStyle: TextStyle(
+            fontSize: 23,
+            letterSpacing: 1,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        checkboxTheme: const CheckboxThemeData(
+          fillColor: WidgetStatePropertyAll(Colors.white),
+          checkColor: WidgetStatePropertyAll(Colors.black),
+        ),
+      ),
       home: const ScreenHome(),
     );
   }
