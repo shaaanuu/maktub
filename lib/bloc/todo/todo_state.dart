@@ -1,4 +1,4 @@
 class TodoState {
-  final List<List> todos;
+  final List todos;
   TodoState(this.todos);
 }
