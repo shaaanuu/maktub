@@ -19,53 +19,63 @@ class ScreenHome extends StatelessWidget {
       ),
       body: BlocBuilder<TodoBloc, TodoState>(
         builder: (context, state) {
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: state.todos.length,
-            itemBuilder: (context, index) {
-              final item = state.todos[index];
-
-              final action = ActionPane(
-                motion: const ScrollMotion(),
-                children: [
-                  SlidableAction(
-                    borderRadius: BorderRadius.circular(10),
-                    icon: Icons.delete_outline_rounded,
-                    onPressed: (context) {
-                      BlocProvider.of<TodoBloc>(context).add(
-                        RemoveTodo(index),
-                      );
-                    },
-                  ),
-                ],
-              );
-
-              return Slidable(
-                startActionPane: action,
-                endActionPane: action,
-                child: ListItemDecoration(
-                  child: ListTile(
-                    leading: Checkbox(
-                      value: item[0],
-                      onChanged: (newValue) {
-                        if (newValue != null) {
-                          BlocProvider.of<TodoBloc>(context).add(
-                            ToggleTodoStatus(index),
-                          );
-                        }
-                      },
+          return state.todos.isEmpty
+              ? const Center(
+                  child: Text(
+                    "Destiny calls—add your first task!",
+                    style: TextStyle(
+                      color: Colors.black,
                     ),
-                    title: Text(
-                      item[1],
-                      style: TextStyle(
-                        decoration: item[0] ? TextDecoration.lineThrough : null,
+                  ),
+                )
+              : ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: state.todos.length,
+                  itemBuilder: (context, index) {
+                    final item = state.todos[index];
+
+                    final action = ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          borderRadius: BorderRadius.circular(10),
+                          icon: Icons.delete_outline_rounded,
+                          onPressed: (context) {
+                            BlocProvider.of<TodoBloc>(context).add(
+                              RemoveTodo(index),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+
+                    return Slidable(
+                      startActionPane: action,
+                      endActionPane: action,
+                      child: ListItemDecoration(
+                        child: ListTile(
+                          leading: Checkbox(
+                            value: item[0],
+                            onChanged: (newValue) {
+                              if (newValue != null) {
+                                BlocProvider.of<TodoBloc>(context).add(
+                                  ToggleTodoStatus(index),
+                                );
+                              }
+                            },
+                          ),
+                          title: Text(
+                            item[1],
+                            style: TextStyle(
+                              decoration:
+                                  item[0] ? TextDecoration.lineThrough : null,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
+                    );
+                  },
+                );
         },
       ),
       floatingActionButton: const Fab(),
