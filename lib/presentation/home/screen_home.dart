@@ -15,12 +15,16 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Maktub'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.brightness_6),
+            icon: theme.brightness == Brightness.dark
+                ? const Icon(Icons.brightness_6)
+                : const Icon(Icons.dark_mode_outlined),
             onPressed: () {
               context.read<ThemeBloc>().add(ToggleThemeEvent());
             },
