@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'bloc/theme/theme_bloc.dart';
+import 'bloc/theme/theme_state.dart';
 import 'bloc/todo/todo_bloc.dart';
 import 'presentation/home/screen_home.dart';
 
@@ -9,7 +11,15 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('todoBox');
 
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ThemeBloc()),
+        BlocProvider(create: (context) => TodoBloc()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,30 +27,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Maktub',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Montserrat',
-        appBarTheme: const AppBarTheme(
-          shadowColor: Colors.grey,
-          elevation: 0.5,
-          titleTextStyle: TextStyle(
-            fontSize: 23,
-            letterSpacing: 1,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        checkboxTheme: const CheckboxThemeData(
-          fillColor: WidgetStatePropertyAll(Colors.white),
-          checkColor: WidgetStatePropertyAll(Colors.black),
-        ),
-      ),
-      home: BlocProvider(
-        create: (context) => TodoBloc(),
-        child: const ScreenHome(),
-      ),
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp(
+          title: 'Maktub',
+          debugShowCheckedModeBanner: false,
+          theme: state.themeData,
+          home: const ScreenHome(),
+        );
+      },
     );
   }
 }

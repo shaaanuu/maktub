@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../../bloc/theme/theme_bloc.dart';
+import '../../bloc/theme/theme_event.dart';
 import '../../bloc/todo/todo_bloc.dart';
 import '../../bloc/todo/todo_event.dart';
 import '../../bloc/todo/todo_state.dart';
@@ -16,6 +18,14 @@ class ScreenHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Maktub'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.brightness_6),
+            onPressed: () {
+              context.read<ThemeBloc>().add(ToggleThemeEvent());
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<TodoBloc, TodoState>(
         builder: (context, state) {
@@ -40,6 +50,7 @@ class ScreenHome extends StatelessWidget {
                         SlidableAction(
                           borderRadius: BorderRadius.circular(10),
                           icon: Icons.delete_outline_rounded,
+                          backgroundColor: Colors.transparent,
                           onPressed: (context) {
                             BlocProvider.of<TodoBloc>(context).add(
                               RemoveTodo(index),
