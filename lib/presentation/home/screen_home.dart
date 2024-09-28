@@ -34,11 +34,13 @@ class ScreenHome extends StatelessWidget {
       body: BlocBuilder<TodoBloc, TodoState>(
         builder: (context, state) {
           return state.todos.isEmpty
-              ? const Center(
+              ? Center(
                   child: Text(
                     "Destiny calls—add your first task!",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                 )
