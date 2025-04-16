@@ -21,8 +21,8 @@ class ListItemDecoration extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.black.withOpacity(0.3)
-                : Colors.black.withOpacity(0.1),
+                ? Colors.grey.withAlpha(20)
+                : Colors.black.withAlpha(25),
             spreadRadius: 1,
             blurRadius: Theme.of(context).brightness == Brightness.dark ? 8 : 6,
             offset: const Offset(0, 4),
