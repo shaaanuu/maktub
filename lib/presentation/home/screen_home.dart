@@ -15,14 +15,12 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Maktub'),
         actions: [
           IconButton(
-            icon: theme.brightness == Brightness.dark
+            icon: Theme.of(context).brightness == Brightness.dark
                 ? const Icon(Icons.brightness_6)
                 : const Icon(Icons.dark_mode_outlined),
             onPressed: () {
@@ -38,7 +36,7 @@ class ScreenHome extends StatelessWidget {
                   child: Text(
                     "Destiny calls—add your first task!",
                     style: TextStyle(
-                      color: theme.brightness == Brightness.light
+                      color: Theme.of(context).brightness == Brightness.light
                           ? Colors.black
                           : Colors.white,
                     ),
@@ -48,9 +46,7 @@ class ScreenHome extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemCount: state.todos.length,
                   itemBuilder: (context, index) {
-                    final item = state.todos[index];
-
-                    final action = ActionPane(
+                    final action =ActionPane(
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
@@ -72,7 +68,7 @@ class ScreenHome extends StatelessWidget {
                       child: ListItemDecoration(
                         child: ListTile(
                           leading: Checkbox(
-                            value: item[0],
+                            value: state.todos[index][0],
                             onChanged: (newValue) {
                               if (newValue != null) {
                                 BlocProvider.of<TodoBloc>(context).add(
@@ -82,10 +78,11 @@ class ScreenHome extends StatelessWidget {
                             },
                           ),
                           title: Text(
-                            item[1],
+                            state.todos[index][1],
                             style: TextStyle(
-                              decoration:
-                                  item[0] ? TextDecoration.lineThrough : null,
+                              decoration: state.todos[index][0]
+                                  ? TextDecoration.lineThrough
+                                  : null,
                             ),
                           ),
                           onLongPress: () => showDialog(
@@ -98,10 +95,9 @@ class ScreenHome extends StatelessWidget {
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      final task = controller.text;
-                                      if (task.isNotEmpty) {
+                                      if (controller.text.isNotEmpty) {
                                         BlocProvider.of<TodoBloc>(context).add(
-                                          EditTodo(index, task),
+                                          EditTodo(index, controller.text),
                                         );
                                         Navigator.of(context).pop();
                                       }

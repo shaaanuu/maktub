@@ -22,9 +22,10 @@ class Fab extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    final task = controller.text;
-                    if (task.isNotEmpty) {
-                      BlocProvider.of<TodoBloc>(context).add(AddTodo(task));
+                    if (controller.text.isNotEmpty) {
+                      BlocProvider.of<TodoBloc>(context).add(
+                        AddTodo(controller.text),
+                      );
                       Navigator.of(ctx).pop();
                     }
                   },

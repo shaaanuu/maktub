@@ -33,9 +33,8 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     brightness: Brightness.dark,
   );
 
-  Future<void> _initHiveBox() async {
-    settingsBox = await Hive.openBox('settings');
-  }
+  Future<void> _initHiveBox() async =>
+      settingsBox = await Hive.openBox('settings');
 
   Future<void> _saveThemePreference(Brightness brightness) async {
     if (settingsBox != null) {
@@ -44,8 +43,6 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     }
   }
 
-  Future<Brightness> _loadThemePreference() async {
-    final theme = settingsBox?.get('theme');
-    return theme == 'dark' ? Brightness.dark : Brightness.light;
-  }
+  Future<Brightness> _loadThemePreference() async =>
+      settingsBox?.get('theme') == 'dark' ? Brightness.dark : Brightness.light;
 }
