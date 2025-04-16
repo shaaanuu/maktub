@@ -18,7 +18,17 @@ class Fab extends StatelessWidget {
             final controller = TextEditingController();
             return AlertDialog(
               title: const Text('Add Todo'),
-              content: TextField(controller: controller),
+              content: TextField(
+                controller: controller,
+                onSubmitted: (value) {
+                  if (controller.text.isNotEmpty) {
+                    BlocProvider.of<TodoBloc>(context).add(
+                      AddTodo(controller.text),
+                    );
+                  }
+                  Navigator.of(ctx).pop();
+                },
+              ),
               actions: [
                 TextButton(
                   onPressed: () {

@@ -46,7 +46,7 @@ class ScreenHome extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemCount: state.todos.length,
                   itemBuilder: (context, index) {
-                    final action =ActionPane(
+                    final action = ActionPane(
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
@@ -91,7 +91,17 @@ class ScreenHome extends StatelessWidget {
                               final controller = TextEditingController();
                               return AlertDialog(
                                 title: const Text('Edit'),
-                                content: TextField(controller: controller),
+                                content: TextField(
+                                  controller: controller,
+                                  onSubmitted: (value) {
+                                    if (controller.text.isNotEmpty) {
+                                      BlocProvider.of<TodoBloc>(context).add(
+                                        EditTodo(index, controller.text),
+                                      );
+                                    }
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
