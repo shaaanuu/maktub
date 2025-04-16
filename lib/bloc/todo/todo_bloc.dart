@@ -34,5 +34,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
       box.deleteAt(event.index);
     });
+
+    on<EditTodo>((event, emit) {
+      final updatedTodos = List.from(state.todos);
+      updatedTodos[event.index][1] = event.editedTask;
+      emit(TodoState(updatedTodos));
+
+      box.putAt(event.index, [false, event.editedTask]);
+    });
   }
 }

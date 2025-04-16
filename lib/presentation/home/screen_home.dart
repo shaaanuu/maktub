@@ -88,6 +88,30 @@ class ScreenHome extends StatelessWidget {
                                   item[0] ? TextDecoration.lineThrough : null,
                             ),
                           ),
+                          onLongPress: () => showDialog(
+                            context: context,
+                            builder: (context) {
+                              final controller = TextEditingController();
+                              return AlertDialog(
+                                title: const Text('Edit'),
+                                content: TextField(controller: controller),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      final task = controller.text;
+                                      if (task.isNotEmpty) {
+                                        BlocProvider.of<TodoBloc>(context).add(
+                                          EditTodo(index, task),
+                                        );
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    child: const Text('Edit'),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                     );
