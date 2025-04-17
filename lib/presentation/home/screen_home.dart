@@ -7,7 +7,7 @@ import '../../bloc/theme/theme_event.dart';
 import '../../bloc/todo/todo_bloc.dart';
 import '../../bloc/todo/todo_event.dart';
 import '../../bloc/todo/todo_state.dart';
-import 'widgets/fab.dart';
+import 'widgets/alert_dialog.dart';
 import 'widgets/listitem_decoration.dart';
 
 class ScreenHome extends StatelessWidget {
@@ -15,6 +15,8 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Maktub'),
@@ -87,36 +89,8 @@ class ScreenHome extends StatelessWidget {
                           ),
                           onLongPress: () => showDialog(
                             context: context,
-                            builder: (context) {
-                              final controller = TextEditingController();
-                              return AlertDialog(
-                                title: const Text('Edit'),
-                                content: TextField(
-                                  controller: controller,
-                                  onSubmitted: (value) {
-                                    if (controller.text.isNotEmpty) {
-                                      BlocProvider.of<TodoBloc>(context).add(
-                                        EditTodo(index, controller.text),
-                                      );
-                                    }
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      if (controller.text.isNotEmpty) {
-                                        BlocProvider.of<TodoBloc>(context).add(
-                                          EditTodo(index, controller.text),
-                                        );
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                    child: const Text('Edit'),
-                                  ),
-                                ],
-                              );
-                            },
+                            builder: (context) =>
+                                alertDialog(context, controller, index, 'Edit'),
                           ),
                         ),
                       ),
@@ -125,7 +99,13 @@ class ScreenHome extends StatelessWidget {
                 );
         },
       ),
-      floatingActionButton: const Fab(),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (ctx) => alertDialog(context, controller, 0, 'Add'),
+        ),
+      ),
     );
   }
 }
