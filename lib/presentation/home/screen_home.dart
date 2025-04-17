@@ -26,7 +26,7 @@ class ScreenHome extends StatelessWidget {
                 ? const Icon(Icons.brightness_6)
                 : const Icon(Icons.dark_mode_outlined),
             onPressed: () {
-              context.read<ThemeBloc>().add(ToggleThemeEvent());
+              context.read<ThemeBloc>().add(ToggleTheme());
             },
           ),
         ],

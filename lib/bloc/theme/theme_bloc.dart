@@ -1,48 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'theme_event.dart';
 import 'theme_state.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  Box? settingsBox;
+  ThemeData currentTheme = _darkTheme;
 
-  ThemeBloc() : super(ThemeState(themeData: _lightTheme)) {
-    _initHiveBox().then((_) {
-      _loadThemePreference().then((theme) {
+  ThemeBloc() : super(ThemeState(themeData: _darkTheme)) {
+    on<ToggleTheme>(
+      (event, emit) {
+        currentTheme = currentTheme == _darkTheme ? _lightTheme : _darkTheme;
+
         emit(ThemeState(
-            themeData: theme == Brightness.dark ? _darkTheme : _lightTheme));
-      });
-    });
-
-    on<ToggleThemeEvent>((event, emit) async {
-      final newTheme = state.themeData.brightness == Brightness.dark
-          ? _lightTheme
-          : _darkTheme;
-      emit(ThemeState(themeData: newTheme));
-      await _saveThemePreference(newTheme.brightness);
-    });
+          themeData:
+              currentTheme.brightness.name == 'dark' ? _darkTheme : _lightTheme,
+        ));
+      },
+    );
   }
 
-  static final ThemeData _lightTheme = ThemeData(
-    brightness: Brightness.light,
-  );
-
-  static final ThemeData _darkTheme = ThemeData(
-    brightness: Brightness.dark,
-  );
-
-  Future<void> _initHiveBox() async =>
-      settingsBox = await Hive.openBox('settings');
-
-  Future<void> _saveThemePreference(Brightness brightness) async {
-    if (settingsBox != null) {
-      await settingsBox!
-          .put('theme', brightness == Brightness.dark ? 'dark' : 'light');
-    }
-  }
-
-  Future<Brightness> _loadThemePreference() async =>
-      settingsBox?.get('theme') == 'dark' ? Brightness.dark : Brightness.light;
+  static final ThemeData _darkTheme = ThemeData(brightness: Brightness.dark);
+  static final ThemeData _lightTheme = ThemeData(brightness: Brightness.light);
 }
