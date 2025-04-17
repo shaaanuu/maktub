@@ -9,7 +9,7 @@ var box = Hive.box('todoBox');
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   TodoBloc() : super(TodoState(box.values.toList())) {
     on<AddTodo>((event, emit) {
-      List.from(state.todos).add([false, event.task]);
+      state.todos.add([false, event.task]);
       emit(TodoState(List.from(state.todos)));
 
       box.put(box.length, [false, event.task]);
@@ -27,7 +27,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     });
 
     on<RemoveTodo>((event, emit) {
-      List.from(state.todos).removeAt(event.index);
+      state.todos.removeAt(event.index);
       emit(TodoState(List.from(state.todos)));
 
       box.deleteAt(event.index);
